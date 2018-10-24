@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <queue>
 #include <vector>
 
 constexpr long long INF64 = 1e18;
@@ -21,12 +20,9 @@ class Graph {
 
   bool negative_cycle = false;
 
-public:
-  Graph(int n) : g(n), dist(n, INF64), prev(n, -1) {}
+  int flag = -1;
 
-  void addEdge(int s, int t, int cost) { g[s].emplace_back(s, t, cost); }
-
-  std::vector<long long> BellmanFord(int s) {
+  void BellmanFord(int s) {
     const int n = g.size();
     dist[s] = 0;
     for (int i = 0; i < n; ++i) {
@@ -43,7 +39,19 @@ public:
         }
       }
     }
-    return dist;
+    flag = s;
+  }
+
+public:
+  Graph(int n) : g(n), dist(n, INF64), prev(n, -1) {}
+
+  void addEdge(int s, int t, long long cost) { g[s].emplace_back(s, t, cost); }
+
+  long long getCost(int s, int t) {
+    if (flag != s) {
+      BellmanFord(s);
+    }
+    return dist[t];
   }
 
   std::vector<int> getPath(int t) {

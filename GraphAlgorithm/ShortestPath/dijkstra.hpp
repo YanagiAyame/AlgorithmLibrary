@@ -23,12 +23,9 @@ class Graph {
   std::vector<std::vector<Edge>> g;
   std::vector<long long> dist, prev;
 
-public:
-  Graph(int n) : g(n), dist(n, INF64), prev(n, -1) {}
+  int flag = -1;
 
-  void addEdge(int s, int t, int cost) { g[s].emplace_back(s, t, cost); }
-
-  std::vector<long long> dijkstra(int s) {
+  void Dijkstra(int s) {
     std::priority_queue<Edge> q;
     dist[s] = 0;
     for (q.emplace(-2, s, 0); !q.empty();) {
@@ -45,6 +42,19 @@ public:
         }
       }
     }
+    flag = s;
+  }
+
+public:
+  Graph(int n) : g(n), dist(n, INF64), prev(n, -1) {}
+
+  void addEdge(int s, int t, long long cost) { g[s].emplace_back(s, t, cost); }
+
+  long long getCost(int s, int t) {
+    if (flag != s) {
+      Dijkstra(s);
+    }
+    return dist[t];
   }
 
   std::vector<int> getPath(int t) {
