@@ -58,7 +58,7 @@ public:
     if (flag != s) {
       BellmanFord(s);
     }
-    assert(t != -INF64);
+    assert(dist[t] != -INF64);
     std::vector<int> path;
     for (; t != -2; t = prev[t]) {
       path.push_back(t);
@@ -67,5 +67,5 @@ public:
     return path;
   }
 
-  bool NegativeCycle = negative_cycle;
-}
+  bool haveNegativeCycle() { return negative_cycle; }
+};
