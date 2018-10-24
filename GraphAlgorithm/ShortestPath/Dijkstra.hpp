@@ -14,10 +14,7 @@ class Graph {
     Edge(int src, int dst, long long weight)
         : src(src), dst(dst), weight(weight) {}
 
-    bool operator<(const Edge &e) const {
-      if (weight != e.weight)
-        return weight > e.weight;
-    }
+    bool operator<(const Edge &e) const { return weight > e.weight; }
   };
 
   std::vector<std::vector<Edge>> g;
@@ -71,4 +68,4 @@ public:
     std::reverse(path.begin(), path.end());
     return path;
   }
-}
+};
