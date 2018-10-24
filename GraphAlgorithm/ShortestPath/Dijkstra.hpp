@@ -48,7 +48,10 @@ class Graph {
 public:
   Graph(int n) : g(n), dist(n, INF64), prev(n, -1) {}
 
-  void addEdge(int s, int t, long long cost) { g[s].emplace_back(s, t, cost); }
+  void addEdge(int s, int t, long long cost) {
+    g[s].emplace_back(s, t, cost);
+    flag = -1;
+  }
 
   long long getCost(int s, int t) {
     if (flag != s) {
@@ -57,7 +60,10 @@ public:
     return dist[t];
   }
 
-  std::vector<int> getPath(int t) {
+  std::vector<int> getPath(int s, int t) {
+    if (flag != s) {
+      Dijkstra(s);
+    }
     std::vector<int> path;
     for (; t != -2; t = prev[t]) {
       path.push_back(t);

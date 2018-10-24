@@ -54,7 +54,10 @@ public:
     return dist[t];
   }
 
-  std::vector<int> getPath(int t) {
+  std::vector<int> getPath(int s, int t) {
+    if (flag != s) {
+      BellmanFord(s);
+    }
     assert(t != -INF64);
     std::vector<int> path;
     for (; t != -2; t = prev[t]) {
