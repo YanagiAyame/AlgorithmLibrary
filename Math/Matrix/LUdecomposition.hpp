@@ -10,7 +10,7 @@ template <typename Type> struct LU_type {
 };
 
 // A => LU
-// to do verifyする
+// verified
 template <typename Type> LU_type<Type> LUdecomposer(Matrix<Type> A) {
 
   assert(A.get_col() == A.get_row());
