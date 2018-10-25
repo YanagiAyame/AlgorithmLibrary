@@ -4,14 +4,14 @@
 #include <cassert>
 #include <cmath>
 
-template <typename Type> struct lu_data {
-  Matrix<Type> A;
+template <typename Type> struct LU_type {
+  Matrix<Type> mat;
   std::vector<int> pivots;
 };
 
 // A => LU
 // to do verifyする
-template <typename Type> lu_data LUdecomposer(Matrix<Type> A) {
+template <typename Type> LU_type<Type> LUdecomposer(Matrix<Type> A) {
 
   assert(A.get_col() == A.get_row());
 
@@ -21,15 +21,15 @@ template <typename Type> lu_data LUdecomposer(Matrix<Type> A) {
   for (int j = 0; j < n; ++j) {
     // pivot選択
     int pivot = j;
-    Type ma = std::fabs(A[pivot][j]);
+    auto ma = std::fabs(A[pivot][j]);
     for (int i = 0; i < n; ++i) {
-      abs_now = std::fabs(A[i][j]);
+      auto abs_now = std::fabs(A[i][j]);
       if (ma < abs_now) {
         pivot = i;
         ma = abs_now;
       }
     }
-    pivots[j] = i;
+    pivots[j] = pivot;
 
     // pivot選択に従って入れ替え
     std::swap(A[pivot], A[j]);
