@@ -19,7 +19,8 @@ public:
   }
   int get_row() const { return mat.size(); }
   int get_col() const { return mat.front().size(); }
-  std::vector<Type> &operator[](int x) { return mat[x]; }
+  std::vector<Type> &operator[](unsigned int x) { return mat[x]; }
+  const std::vector<Type> &operator[](unsigned int x) const { return mat[x]; }
   Matrix &operator=(const Matrix &a) {
     assert(this->get_row() == a.get_row());
     assert(this->get_col() == a.get_col());
