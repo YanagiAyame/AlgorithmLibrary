@@ -9,6 +9,11 @@ template <typename Type> struct LU_type {
   std::vector<int> pivots;
 };
 
+template <typename Type> struct LU_type {
+  Matrix<Type> mat;
+  std::vector<int> pivots;
+};
+
 // A => LU
 // verified
 template <typename Type> LU_type<Type> LUdecomposer(Matrix<Type> A) {
@@ -19,31 +24,29 @@ template <typename Type> LU_type<Type> LUdecomposer(Matrix<Type> A) {
   std::vector<int> pivots(n);
 
   for (int j = 0; j < n; ++j) {
-    // pivot選択
+    //上三角行列を生成
+    for (int i = 0; i <= j; ++i) {
+      for (int k = 0; k < i; ++k) {
+        A[i][j] -= A[i][k] * A[k][j];
+      }
+    }
+    // pivot選択をしつつ下三角行列を計算
     int pivot = j;
-    auto ma = std::fabs(A[pivot][j]);
-    for (int i = 0; i < n; ++i) {
-      auto abs_now = std::fabs(A[i][j]);
-      if (ma < abs_now) {
+    int ma = 1; // L[j][j] == 1 としているため
+    for (int i = j + 1; i < n; ++i) {
+      for (int k = 0; k < j; ++k) {
+        A[i][j] -= A[i][k] * A[k][j];
+      }
+      if (ma < A[i][j]) {
         pivot = i;
-        ma = abs_now;
+        ma = A[i][j];
       }
     }
     pivots[j] = pivot;
 
     // pivot選択に従って入れ替え
     std::swap(A[pivot], A[j]);
-
-    //三角行列を生成
-    for (int i = 0; i <= j; ++i) {
-      for (int k = 0; k < i; ++k) {
-        A[i][j] -= A[i][k] * A[k][j];
-      }
-    }
     for (int i = j + 1; i < n; ++i) {
-      for (int k = 0; k < j; ++k) {
-        A[i][j] -= A[i][k] * A[k][j];
-      }
       A[i][j] /= A[j][j];
     }
   }
@@ -51,17 +54,17 @@ template <typename Type> LU_type<Type> LUdecomposer(Matrix<Type> A) {
 }
 
 // find x : Ax = (LU)x = L(Ux) = Ly = b
-// to do verify
+// verified
 template <typename Type>
-std::vector<Type> LUsolver(const lu_data &LU, std::vector<Type> b) {
+std::vector<Type> LUsolver(const LU_type<Type> &LU, std::vector<Type> b) {
 
-  const auto &A = LU.A;
+  const auto &A = LU.mat;
   const auto &pivots = LU.pivots;
 
   const int n = pivots.size();
 
   for (int i = 0; i < n; ++i) {
-    std::swap(b[i], b[pivots[n - i - 1]]);
+    std::swap(b[i], b[pivots[i]]);
   }
 
   // Ly = b を解く
