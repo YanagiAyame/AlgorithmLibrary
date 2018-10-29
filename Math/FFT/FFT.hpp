@@ -1,5 +1,9 @@
 #pragma once
 
+// verified
+// https://beta.atcoder.jp/contests/atc001/submissions/3497697
+// 整数値が欲しいときで誤差をなくしたいときは NTT を使う
+
 #include <cmath>
 #include <complex>
 #include <vector>
