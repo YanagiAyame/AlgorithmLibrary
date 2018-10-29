@@ -48,7 +48,7 @@ std::vector<data_type> fft(std::vector<data_type> v, bool inv = false) {
 std::vector<data_type> convolution(std::vector<data_type> x,
                                    std::vector<data_type> y) {
   int n = 1;
-  int t = x.size() + y.size();
+  int t = x.size() + y.size() + 1;
   while (n < t) {
     n <<= 1;
   }
