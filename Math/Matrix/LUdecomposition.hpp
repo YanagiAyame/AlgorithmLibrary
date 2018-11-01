@@ -9,11 +9,6 @@ template <typename Type> struct LU_type {
   std::vector<int> pivots;
 };
 
-template <typename Type> struct LU_type {
-  Matrix<Type> mat;
-  std::vector<int> pivots;
-};
-
 // A => LU
 // verified
 template <typename Type> LU_type<Type> LUdecomposer(Matrix<Type> A) {
