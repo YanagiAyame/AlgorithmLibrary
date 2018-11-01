@@ -81,3 +81,21 @@ std::vector<Type> LUsolver(const LU_type<Type> &LU, std::vector<Type> b) {
 
   return b;
 }
+
+// to do verify
+template <typename Type> Matrix<Type> Inv(Matrix<Type> A) {
+  const int n = A.get_col();
+  auto lu = LUdecomposer(A);
+  vector<Type> b(n);
+  for (int i = 0; i < n; ++i) {
+    if (i) {
+      b[i - 1] = (Type)(0);
+    }
+    b[i] = (Type)(1);
+    auto x = LUsolver(lu, b);
+    for (int j = 0; j < n; ++j) {
+      A[j][i] = 0;
+    }
+  }
+  return A;
+}
