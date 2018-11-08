@@ -22,11 +22,10 @@ public:
   std::vector<Type> &operator[](unsigned int x) { return mat[x]; }
   const std::vector<Type> &operator[](unsigned int x) const { return mat[x]; }
   Matrix &operator=(const Matrix &a) {
-    assert(this->get_row() == a.get_row());
-    assert(this->get_col() == a.get_col());
     mat = a.mat;
     return *this;
   }
+  Matrix(const Matrix &a) { (*this) = a; }
   bool operator==(const Matrix &a) { return mat == a.mat; }
   Matrix &operator+=(Matrix &a) {
     int R = this->get_row, C = this->get_col;
