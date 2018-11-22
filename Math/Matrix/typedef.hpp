@@ -7,7 +7,14 @@ private:
   std::vector<std::vector<Type>> mat;
 
 public:
-  Matrix(std::initializer_list<std::vector<Type>> l) : mat(l) {}
+  Matrix() = default;
+  Matrix(Matrix &&) = default;
+  Matrix &operator=(Matrix &&) = default;
+  Matrix(const Matrix &) = default;
+  Matrix &operator=(const Matrix &) = default;
+  ~Matrix() = default;
+
+  Matrix(std::initializer_list<std::vector<Type>> init) : mat(init) {}
   Matrix(int R, int C, bool is_identity = false) {
     mat = std::vector<std::vector<Type>>(R, std::vector<Type>(C));
     if (is_identity) {
@@ -17,46 +24,53 @@ public:
       }
     }
   }
-  int get_row() const { return mat.size(); }
-  int get_col() const { return mat.front().size(); }
+
+  int row() const { return mat.size(); }
+  int col() const { return mat.front().size(); }
+
   std::vector<Type> &operator[](unsigned int x) { return mat[x]; }
   const std::vector<Type> &operator[](unsigned int x) const { return mat[x]; }
-  Matrix &operator=(const Matrix &a) {
-    mat = a.mat;
-    return *this;
-  }
-  Matrix(const Matrix &a) { (*this) = a; }
-  bool operator==(const Matrix &a) { return mat == a.mat; }
-  Matrix &operator+=(Matrix &a) {
-    int R = this->get_row, C = this->get_col;
-    assert(R == a.get_row());
-    assert(C == a.get_col());
-    for (int i = 0; i < R; i++) {
-      for (int j = 0; j < C; j++) {
-        // caution (operation)
-        (*this)[i][j] += a[i][j];
-      }
-    }
-    return *this;
-  }
-  Matrix operator+(Matrix a) { return (*this) += a; }
-  Matrix operator*(Matrix a) {
-    assert(this->get_col() == a.get_row());
-    int R_ret = this->get_row(), C_ret = a.get_col(), X = this->get_col();
-    Matrix<Type> ret(R_ret, C_ret);
 
-    for (int i = 0; i < R_ret; i++) {
-      for (int k = 0; k < X; k++) {
-        for (int j = 0; j < C_ret; j++) {
-          // caution (operation)
-          ret[i][j] += ((*this)[i][k] * a[k][j]);
-        }
-      }
-    }
-    return ret;
-  }
-  Matrix &operator*=(Matrix a) {
-    *this = (*this) * a;
+  bool operator==(const Matrix &m) { return mat == m.mat; }
+
+  template <typename F> Matrix &apply(F f) {
+    for (auto &x : elems)
+      f(x);
     return *this;
+  }
+
+  template <typename M, typename F>
+  Enable_if<Matrix_type<M>(), Matrix &> apply(const M &m, F f) {
+    assert(row() == m.row() && col() == m.col());
+    for (auto i = begin(), j = m.begin(); i != end(); ++i, ++j)
+      f(*i, *j);
+    return *this;
+  }
+
+  template <typename M>
+  Enable_if<Matrix_type<M>(), Matrix &> operator+=(const M &x) {
+    return apply(m, [](T &a, const Value_type<M> &b) { a += b; });
   }
 };
+
+template <typename T>
+Matrix<T> operator+(const Matrix<T> &a, const Matrix<T> &b) {
+  Matrix<T, N> res = a;
+  res += b;
+  return res;
+}
+
+template <typename T>
+Matrix<T> operator*(const Matrix<T> &a, const Matrix<T> &b) {
+  assert(a.col() == b.row());
+  const int R = a.row(), C = b.col(), X = a.col();
+  Matrix<T> res(R, C);
+  for (int i = 0; i < R; i++) {
+    for (int k = 0; k < X; k++) {
+      for (int j = 0; j < C; j++) {
+        ret[i][j] += (a[i][k] * b[k][j]);
+      }
+    }
+  }
+  return res;
+}
