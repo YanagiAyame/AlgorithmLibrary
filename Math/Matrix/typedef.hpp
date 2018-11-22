@@ -1,10 +1,12 @@
 #pragma once
 
+#include <cassert>
+#include <iostream>
 #include <vector>
 
-template <typename Type> class Matrix {
+template <typename T> class Matrix {
 private:
-  std::vector<std::vector<Type>> mat;
+  std::vector<std::vector<T>> mat;
 
 public:
   Matrix() = default;
@@ -14,13 +16,13 @@ public:
   Matrix &operator=(const Matrix &) = default;
   ~Matrix() = default;
 
-  Matrix(std::initializer_list<std::vector<Type>> init) : mat(init) {}
+  Matrix(std::initializer_list<std::vector<T>> init) : mat(init) {}
   Matrix(int R, int C, bool is_identity = false) {
-    mat = std::vector<std::vector<Type>>(R, std::vector<Type>(C));
+    mat = std::vector<std::vector<T>>(R, std::vector<T>(C));
     if (is_identity) {
       assert(R == C);
       for (int i = 0; i < R; i++) {
-        mat[i][i] = Type(1);
+        mat[i][i] = T(1);
       }
     }
   }
@@ -28,34 +30,41 @@ public:
   int row() const { return mat.size(); }
   int col() const { return mat.front().size(); }
 
-  std::vector<Type> &operator[](unsigned int x) { return mat[x]; }
-  const std::vector<Type> &operator[](unsigned int x) const { return mat[x]; }
+  std::vector<T> &operator[](unsigned int x) { return mat[x]; }
+  const std::vector<T> &operator[](unsigned int x) const { return mat[x]; }
 
-  bool operator==(const Matrix &m) { return mat == m.mat; }
-
-  template <typename F> Matrix &apply(F f) {
-    for (auto &x : elems)
-      f(x);
+  template <typename F> Matrix<T> &apply(F f) {
+    for (auto &elems : mat) {
+      for (auto &x : elems) {
+        f(x);
+      }
+    }
     return *this;
   }
 
-  template <typename M, typename F>
-  Enable_if<Matrix_type<M>(), Matrix &> apply(const M &m, F f) {
+  Matrix<T> &operator+=(const T &val) {
+    return apply([&](T &a) { a += val; });
+  }
+
+  template <typename F> Matrix<T> &apply(const Matrix<T> &m, F f) {
     assert(row() == m.row() && col() == m.col());
-    for (auto i = begin(), j = m.begin(); i != end(); ++i, ++j)
-      f(*i, *j);
+    const int R = row(), C = col();
+    for (int i = 0; i < R; ++i) {
+      for (int j = 0; j < C; ++j) {
+        f(mat[i][j], m[i][j]);
+      }
+    }
     return *this;
   }
 
-  template <typename M>
-  Enable_if<Matrix_type<M>(), Matrix &> operator+=(const M &x) {
-    return apply(m, [](T &a, const Value_type<M> &b) { a += b; });
+  Matrix<T> &operator+=(const Matrix<T> &m) {
+    return apply(m, [](T &a, const T &b) { a += b; });
   }
 };
 
 template <typename T>
 Matrix<T> operator+(const Matrix<T> &a, const Matrix<T> &b) {
-  Matrix<T, N> res = a;
+  Matrix<T> res = a;
   res += b;
   return res;
 }
@@ -68,9 +77,21 @@ Matrix<T> operator*(const Matrix<T> &a, const Matrix<T> &b) {
   for (int i = 0; i < R; i++) {
     for (int k = 0; k < X; k++) {
       for (int j = 0; j < C; j++) {
-        ret[i][j] += (a[i][k] * b[k][j]);
+        res[i][j] += (a[i][k] * b[k][j]);
       }
     }
   }
   return res;
+}
+
+template <typename T>
+std::ostream &operator<<(std::ostream &os, const Matrix<T> &m) {
+  const int R = m.row(), C = m.col();
+  for (int i = 0; i < R; ++i) {
+    for (int j = 0; j < C; ++j) {
+      os << m[i][j] << ',';
+    }
+    os << std::endl;
+  }
+  return os;
 }
