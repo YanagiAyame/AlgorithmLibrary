@@ -45,6 +45,9 @@ public:
   Matrix<T> &operator+=(const T &val) {
     return apply([&](T &a) { a += val; });
   }
+  Matrix<T> &operator*=(const T &val) {
+    return apply([&](T &a) { a += val; });
+  }
 
   template <typename F> Matrix<T> &apply(const Matrix<T> &m, F f) {
     assert(row() == m.row() && col() == m.col());

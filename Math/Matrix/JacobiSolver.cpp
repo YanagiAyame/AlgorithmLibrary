@@ -1,5 +1,5 @@
 #include "typedef.hpp"
-#include <iostream>
+#include <cmath>
 
 constexpr long double eps = 1e-15;
 
@@ -8,8 +8,8 @@ constexpr long double eps = 1e-15;
 template <typename Type>
 std::vector<Type> JacobiSolver(const Matrix<Type> &A,
                                const std::vector<Type> &b) {
-  const int n = A.get_col();
-  assert(n == A.get_row());
+  const int n = A.col();
+  assert(n == A.row());
 
   std::vector<Type> X(n);
   std::vector<Type> newX(n);

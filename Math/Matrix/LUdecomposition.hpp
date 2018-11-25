@@ -13,9 +13,9 @@ template <typename Type> struct LU_type {
 // verified
 template <typename Type> LU_type<Type> LUdecomposer(Matrix<Type> A) {
 
-  assert(A.get_col() == A.get_row());
+  assert(A.col() == A.row());
 
-  const int n = A.get_col();
+  const int n = A.col();
   std::vector<int> pivots(n);
 
   for (int j = 0; j < n; ++j) {
@@ -84,7 +84,7 @@ std::vector<Type> LUsolver(const LU_type<Type> &LU, std::vector<Type> b) {
 
 // to do verify
 template <typename Type> Matrix<Type> Inv(Matrix<Type> A) {
-  const int n = A.get_col();
+  const int n = A.col();
   auto lu = LUdecomposer(A);
   vector<Type> b(n);
   for (int i = 0; i < n; ++i) {
