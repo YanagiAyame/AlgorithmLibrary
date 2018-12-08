@@ -5,7 +5,7 @@
 #include <queue>
 #include <utility>
 
-std::pair<long long, Edges> kruskal(const Graph &g) {
+std::pair<long long, Edges> Kruskal(const Graph &g) {
   int n = g.size();
   UnionFind<int> uf(n);
   std::priority_queue<Edge> q;

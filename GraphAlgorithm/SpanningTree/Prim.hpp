@@ -4,7 +4,7 @@
 #include <queue>
 #include <utility>
 
-std::pair<long long, Edges> prim(const Graph &g, int s) {
+std::pair<long long, Edges> Prim(const Graph &g, int s) {
   int n = g.size();
   Edges tree;
   long long total = 0;
@@ -16,7 +16,8 @@ std::pair<long long, Edges> prim(const Graph &g, int s) {
     q.pop();
     if (visited[e.dst])
       continue;
-    tree.push_back(e);
+    if (e.src != -1)
+      tree.push_back(e);
     total += e.weight;
     visited[e.dst] = true;
     for (auto f : g[e.dst]) {
