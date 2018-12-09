@@ -1,71 +1,83 @@
-#pragma once
+#include <bits/stdc++.h>
 
-#include <algorithm>
-#include <cassert>
-#include <vector>
+using namespace std;
+
+// Graph template
+template <class... Args> struct Edge {
+  int from, to;
+  tuple<Args...> values;
+  Edge(int from, int to, Args... values)
+      : from(from), to(to), values(values...) {}
+};
+template <class E> auto operator<(const E &e, const E &f) {
+  return e.values > f.values;
+}
+
+template <class... Args> class Graph {
+  using Edges = vector<Edge<Args...>>;
+  vector<Edges> graph_;
+
+public:
+  Graph(int n) : graph_(n) {}
+  size_t size() { return graph_.size(); };
+  size_t size() const { return graph_.size(); };
+  auto &operator[](unsigned int x) { return graph_[x]; }
+  const auto &operator[](unsigned int x) const { return graph_[x]; }
+  void AddEdge(int s, int t, Args... v) { graph_[s].emplace_back(s, t, v...); }
+};
 
 constexpr long long INF64 = 1e18;
 
-class Graph {
+using Weight = long long;
 
-  struct Edge {
-    int src, dst;
-    long long weight;
-    Edge(int src, int dst, long long weight)
-        : src(src), dst(dst), weight(weight) {}
-  };
-
-  std::vector<std::vector<Edge>> g;
-  std::vector<long long> dist, prev;
-
-  bool negative_cycle = false;
-
-  int flag = -1;
-
-  void BellmanFord(int s) {
-    const int n = g.size();
-    dist[s] = 0;
-    for (int i = 0; i < n; ++i) {
-      for (int j = 0; j < n; ++j) {
-        for (auto e : g[j]) {
-          if (dist[e.src] != INF64 && dist[e.dst] > dist[e.src] + e.weight) {
-            dist[e.dst] = dist[e.src] + e.weight;
-            prev[e.dst] = e.src;
-            if (i == n - 1) {
-              dist[e.dst] = -INF64;
-              negative_cycle = true;
-            }
+template <class G> auto BellmanFord(const G &g, int s) {
+  const int n = (int)g.size();
+  vector<Weight> dist(n, INF64); //各点における始点sからの距離が入る
+  vector<int> prev(n, -1);       //各点における最短路の親が入る
+  dist[s] = 0;
+  bool negative_cycle = false; // 負閉路検出
+  for (int i = 0; i < n; ++i) {
+    for (int j = 0; j < n; ++j) {
+      for (const auto &e : g[j]) {
+        int u = e.from, v = e.to;
+        Weight cost = get<0>(e.values);
+        if (dist[u] != INF64 && dist[v] > dist[u] + cost) {
+          dist[v] = dist[u] + cost;
+          prev[v] = u;
+          if (i == n - 1) {
+            dist[v] = -INF64;
+            negative_cycle = true;
           }
         }
       }
     }
-    flag = s;
   }
+  return make_tuple(negative_cycle, dist, prev);
+}
 
-public:
-  Graph(int n) : g(n), dist(n, INF64), prev(n, -1) {}
-
-  void addEdge(int s, int t, long long cost) { g[s].emplace_back(s, t, cost); }
-
-  long long getCost(int s, int t) {
-    if (flag != s) {
-      BellmanFord(s);
-    }
-    return dist[t];
+/*
+int main() {
+  cin.sync_with_stdio(false);
+  int n, m, root;
+  cin >> n >> m >> root;
+  Graph<Weight> g(n);
+  for (int i = 0; i < m; ++i) {
+    int s, t;
+    Weight d;
+    cin >> s >> t >> d;
+    g[s].emplace_back(s, t, d);
   }
-
-  std::vector<int> getPath(int s, int t) {
-    if (flag != s) {
-      BellmanFord(s);
+  auto ans = BellmanFord(g, root);
+  if (get<0>(ans)) {
+    cout << "NEGATIVE CYCLE" << endl;
+  } else {
+    auto dist = move(get<1>(ans));
+    for (int i = 0; i < n; ++i) {
+      if (dist[i] == INF64)
+        cout << "INF" << endl;
+      else
+        cout << dist[i] << endl;
     }
-    assert(dist[t] != -INF64);
-    std::vector<int> path;
-    for (; t != -2; t = prev[t]) {
-      path.push_back(t);
-    }
-    std::reverse(path.begin(), path.end());
-    return path;
   }
-
-  bool haveNegativeCycle() { return negative_cycle; }
-};
+}*/
+// be checked by AOJ(GRL-1-B).

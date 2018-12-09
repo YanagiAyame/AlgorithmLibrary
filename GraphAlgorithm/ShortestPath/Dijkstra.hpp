@@ -1,71 +1,82 @@
-#pragma once
+#include <bits/stdc++.h>
 
-#include <algorithm>
-#include <queue>
-#include <vector>
+using namespace std;
+
+// Graph template
+template <class... Args> struct Edge {
+  int from, to;
+  tuple<Args...> values;
+  Edge(int from, int to, Args... values)
+      : from(from), to(to), values(values...) {}
+};
+template <class E> auto operator<(const E &e, const E &f) {
+  return e.values > f.values;
+}
+
+template <class... Args> class Graph {
+  using Edges = vector<Edge<Args...>>;
+  vector<Edges> graph_;
+
+public:
+  Graph(int n) : graph_(n) {}
+  size_t size() { return graph_.size(); };
+  size_t size() const { return graph_.size(); };
+  auto &operator[](unsigned int x) { return graph_[x]; }
+  const auto &operator[](unsigned int x) const { return graph_[x]; }
+  void AddEdge(int s, int t, Args... v) { graph_[s].emplace_back(s, t, v...); }
+};
 
 constexpr long long INF64 = 1e18;
 
-class Graph {
+using Weight = long long;
 
-  struct Edge {
-    int src, dst;
-    long long weight;
-    Edge(int src, int dst, long long weight)
-        : src(src), dst(dst), weight(weight) {}
-
-    bool operator<(const Edge &e) const { return weight > e.weight; }
-  };
-
-  std::vector<std::vector<Edge>> g;
-  std::vector<long long> dist, prev;
-
-  int flag = -1;
-
-  void Dijkstra(int s) {
-    std::priority_queue<Edge> q;
-    dist[s] = 0;
-    for (q.emplace(-2, s, 0); !q.empty();) {
-      Edge e = q.top();
-      q.pop();
-      if (prev[e.dst] != -1) {
-        continue;
-      }
-      prev[e.dst] = e.src;
-      for (auto next_e : g[e.dst]) {
-        if (dist[next_e.dst] > next_e.weight + e.weight) {
-          dist[next_e.dst] = next_e.weight + e.weight;
-          q.emplace(next_e.src, next_e.dst, dist[next_e.dst]);
-        }
+template <class G> auto Dijkstra(const G &g, int s) {
+  const int n = (int)g.size();
+  vector<Weight> dist(n, INF64); //各点における始点sからの距離が入る
+  vector<int> prev(n, -1);       //各点における最短路の親が入る
+  dist[s] = 0;
+  priority_queue<Edge<Weight>> q;
+  q.emplace(-2, s, dist[s]);
+  while (!q.empty()) {
+    auto now = q.top();
+    q.pop();
+    int parent = now.from, u = now.to;
+    if (prev[u] != -1) {
+      continue;
+    } else {
+      prev[u] = parent;
+    }
+    for (auto e : g[u]) {
+      int v = e.to;
+      auto cost = get<0>(e.values);
+      if (dist[v] > dist[u] + cost) {
+        dist[v] = dist[u] + cost;
+        q.emplace(u, v, dist[v]);
       }
     }
-    flag = s;
   }
+  return make_pair(dist, prev);
+}
 
-public:
-  Graph(int n) : g(n), dist(n, INF64), prev(n, -1) {}
-
-  void addEdge(int s, int t, long long cost) {
-    g[s].emplace_back(s, t, cost);
-    flag = -1;
+/*
+int main() {
+  cin.sync_with_stdio(false);
+  int n, m, root;
+  cin >> n >> m >> root;
+  Graph<Weight> g(n);
+  for (int i = 0; i < m; ++i) {
+    int s, t;
+    Weight d;
+    cin >> s >> t >> d;
+    g.AddEdge(s, t, d);
   }
-
-  long long getCost(int s, int t) {
-    if (flag != s) {
-      Dijkstra(s);
-    }
-    return dist[t];
+  auto dist = Dijkstra(g, root).first;
+  for (int i = 0; i < n; ++i) {
+    if (dist[i] == INF64)
+      cout << "INF" << endl;
+    else
+      cout << dist[i] << endl;
   }
-
-  std::vector<int> getPath(int s, int t) {
-    if (flag != s) {
-      Dijkstra(s);
-    }
-    std::vector<int> path;
-    for (; t != -2; t = prev[t]) {
-      path.push_back(t);
-    }
-    std::reverse(path.begin(), path.end());
-    return path;
-  }
-};
+}
+*/
+// be checked by AOJ(GRL-1-A).
