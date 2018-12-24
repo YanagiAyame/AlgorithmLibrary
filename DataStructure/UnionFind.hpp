@@ -1,10 +1,10 @@
 #pragma once
 
-#include <vector>
+#include <bits/stdc++.h>
 
-template <typename T> struct UnionFind {
+template <typename T = int> struct UnionFind {
   std::vector<T> data;
-  UnionFind(T n) : data(n, -1) {}
+  UnionFind(int n) : data(n, -1) {}
   bool unite(T x, T y) {
     x = root(x);
     y = root(y);
