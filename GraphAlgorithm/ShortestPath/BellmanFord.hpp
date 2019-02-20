@@ -3,17 +3,24 @@
 using namespace std;
 
 // Graph template
-template <class... Args> struct Edge {
+template <class... Args>
+struct Edge
+{
   int from, to;
   tuple<Args...> values;
   Edge(int from, int to, Args... values)
       : from(from), to(to), values(values...) {}
 };
-template <class E> auto operator<(const E &e, const E &f) {
+
+template <class E>
+auto operator<(const E &e, const E &f)
+{
   return e.values > f.values;
 }
 
-template <class... Args> class Graph {
+template <class... Args>
+class Graph
+{
   using Edges = vector<Edge<Args...>>;
   vector<Edges> graph_;
 
@@ -30,21 +37,28 @@ constexpr long long INF64 = 1e18;
 
 using Weight = long long;
 
-template <class G> auto BellmanFord(const G &g, int s) {
+template <typename G>
+auto BellmanFord(const G &g, int s)
+{
   const int n = (int)g.size();
   vector<Weight> dist(n, INF64); //各点における始点sからの距離が入る
   vector<int> prev(n, -1);       //各点における最短路の親が入る
   dist[s] = 0;
   bool negative_cycle = false; // 負閉路検出
-  for (int i = 0; i < n; ++i) {
-    for (int j = 0; j < n; ++j) {
-      for (const auto &e : g[j]) {
+  for (int i = 0; i < n; ++i)
+  {
+    for (int j = 0; j < n; ++j)
+    {
+      for (const auto &e : g[j])
+      {
         int u = e.from, v = e.to;
         Weight cost = get<0>(e.values);
-        if (dist[u] != INF64 && dist[v] > dist[u] + cost) {
+        if (dist[u] != INF64 && dist[v] > dist[u] + cost)
+        {
           dist[v] = dist[u] + cost;
           prev[v] = u;
-          if (i == n - 1) {
+          if (i == n - 1)
+          {
             dist[v] = -INF64;
             negative_cycle = true;
           }
