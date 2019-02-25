@@ -1,15 +1,20 @@
 #pragma once
 
-#include <bits/stdc++.h>
+#include <vector>
 
-// 累積和　1-indexed
-template <typename T> class CumulativeSum {
+// Runs range sum queries only.
+// Sum : O(1)
+template <class Abel>
+class CumulativeSum
+{
   std::vector<T> _sums;
 
 public:
-  CumulativeSum(const vector<T> &v) : _sums(v) {
+  CumulativeSum(const vector<T> &v) : _sums(v)
+  {
     _sums.insert(_sums.begin(), 0);
-    for (int i = 1; i < (int)_sums.size(); ++i) {
+    for (int i = 1; i < (int)_sums.size(); ++i)
+    {
       _sums[i] += _sums[i - 1];
     }
   }
