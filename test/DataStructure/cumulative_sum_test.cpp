@@ -48,5 +48,5 @@ int main()
 		std::cout << ans << std::endl;
 	}
 }
-// be checked by AOJ(0022)
+// be checked by AOJ(0022).
 // http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=0022
