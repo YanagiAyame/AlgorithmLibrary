@@ -21,7 +21,7 @@ public:
       data_[index] += num;
   }
 
-  // sum of [0, right)
+  // Gets the sum of data[0, right)
   Abel Sum(int right)
   {
     Abel sum = 0;
@@ -30,6 +30,6 @@ public:
     return sum;
   }
 
-  // sum of [left, right)
+  // Gets the sum of data[left, right)
   Abel Sum(int left, int right) { return Sum(right) - Sum(left); }
 };
