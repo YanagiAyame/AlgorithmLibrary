@@ -1,25 +1,37 @@
-#include <bits/stdc++.h>
+#include <vector>
+#include <functional>
 
-using namespace std;
-
+// Segment tree with lazy propagation.
+// Example : range add, range sum
+//  using ll = long long;
+//	using P = std::pair<ll, ll>;
+//	auto f = [](P a, P b) {
+//		return P(a.first + b.first, a.second + b.second);
+//	};
+//	auto g = [](P a, ll b) {
+//		return P(a.first + b * a.second, a.second);
+//	};
+//	auto h = [](ll a, ll b) { return a + b; };
+//	LazySegmentTree<P, ll> seg_tree(f, g, h, P(0, 0), 0);
+//	seg_tree.build(std::vector<P>(n, P(0, 1)));
 template <class Data, class Operator>
 class LazySegmentTree
 {
 	int size_, height_;
 
 	// (Data, F) is a monoid.
-	vector<Data> data_;
-	using F = function<Data(Data, Data)>;
+	std::vector<Data> data_;
+	using F = std::function<Data(Data, Data)>;
 	const F f_;
 	const Data data_id_;
 
 	// This is operation.
-	using G = function<Data(Data, Operator)>;
+	using G = std::function<Data(Data, Operator)>;
 	const G g_;
 
 	// (Operator, H) is a monoid.
-	vector<Operator> lazy_;
-	using H = function<Operator(Operator, Operator)>;
+	std::vector<Operator> lazy_;
+	using H = std::function<Operator(Operator, Operator)>;
 	const H h_;
 	const Operator operator_id_;
 
@@ -78,7 +90,8 @@ class LazySegmentTree
 	LazySegmentTree(F f, G g, H h, Data data_id, Operator operator_id)
 		: f_(f), data_id_(data_id), g_(g), h_(h), operator_id_(operator_id) {}
 
-	void build(const vector<Data> &elements)
+	// Initializes the Data.
+	void build(const std::vector<Data> &elements)
 	{
 		const int num = elements.size();
 		init(num);
@@ -92,6 +105,7 @@ class LazySegmentTree
 		}
 	}
 
+	// Updates the data[a,b) by a operation x.
 	void update(int a, int b, Operator x)
 	{
 		thrust(a += size_);
@@ -113,6 +127,7 @@ class LazySegmentTree
 		recalc(b);
 	}
 
+	// Sets the data[a] with x.
 	void set(int a, Data x)
 	{
 		thrust(a += size_);
@@ -121,6 +136,7 @@ class LazySegmentTree
 		recalc(a);
 	}
 
+	// Queries the data[a,b).
 	Data query(int a, int b)
 	{
 		thrust(a += size_);
@@ -140,39 +156,3 @@ class LazySegmentTree
 		return f_(vl, vr);
 	}
 };
-
-/*
-int main()
-{
-	// range add, range sum
-	int n, q;
-	cin >> n >> q;
-	using ll = long long;
-	using P = pair<ll, ll>;
-	auto f = [](P a, P b) {
-		return P(a.first + b.first, a.second + b.second);
-	};
-	auto g = [](P a, ll b) {
-		return P(a.first + b * a.second, a.second);
-	};
-	auto h = [](ll a, ll b) { return a + b; };
-	LazySegmentTree<P, ll> seg_tree(f, g, h, P(0, 0), 0);
-	seg_tree.build(vector<P>(n, P(0, 1)));
-	for (int i = 0; i < q; ++i)
-	{
-		int c, s, t;
-		ll x;
-		cin >> c;
-		if (c)
-		{
-			cin >> s >> t;
-			cout << seg_tree.query(s - 1, t).first << endl;
-		}
-		else
-		{
-			cin >> s >> t >> x;
-			seg_tree.update(s - 1, t, x);
-		}
-	}
-}*/
-// be checked by AOJ(DSL-2-G).
