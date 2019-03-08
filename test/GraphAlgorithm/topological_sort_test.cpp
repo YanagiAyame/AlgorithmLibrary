@@ -1,13 +1,16 @@
-#include <bits/stdc++.h>
+#include <vector>
+#include <tuple>
 
-using namespace std;
+#include <utility>
+#include <algorithm>
+#include <iostream>
 
-// Graph template
+// Graph template (start)
 template <class... Args>
 struct Edge
 {
 	int from, to;
-	tuple<Args...> values;
+	std::tuple<Args...> values;
 	Edge(int from, int to, Args... values)
 		: from(from), to(to), values(values...) {}
 };
@@ -21,17 +24,19 @@ auto operator<(const E &e, const E &f)
 template <class... Args>
 class Graph
 {
-	using Edges = vector<Edge<Args...>>;
-	vector<Edges> graph_;
+	using Edges = std::vector<Edge<Args...>>;
+	std::vector<Edges> graph_;
 
   public:
 	Graph(int n) : graph_(n) {}
-	size_t size() { return graph_.size(); };
-	size_t size() const { return graph_.size(); };
+	std::size_t size() { return graph_.size(); };
+	std::size_t size() const { return graph_.size(); };
 	auto &operator[](unsigned int x) { return graph_[x]; }
 	const auto &operator[](unsigned int x) const { return graph_[x]; }
 	void AddEdge(int s, int t, Args... v) { graph_[s].emplace_back(s, t, v...); }
+	void AddEdge(Edge<Args...> e) { graph_[e.from].push_back(e); }
 };
+// Graph template (end)
 
 //再帰ラムダ用テンプレート
 template <typename F>
@@ -63,9 +68,9 @@ template <typename G>
 auto TopologicalSort(const G &g)
 {
 	const int kSize = g.size();
-	vector<int> sorted;
+	std::vector<int> sorted;
 	sorted.reserve(kSize);
-	vector<bool> visited(kSize, false);
+	std::vector<bool> visited(kSize, false);
 	auto topo_dfs = makeFixPoint([&](auto f, int n) -> void {
 		if (!visited[n])
 		{
@@ -81,27 +86,26 @@ auto TopologicalSort(const G &g)
 	{
 		topo_dfs(i);
 	}
-	reverse(sorted.begin(), sorted.end());
+	std::reverse(sorted.begin(), sorted.end());
 	return sorted;
 }
 
-/*
 int main()
 {
 	int n, m;
-	cin >> n >> m;
+	std::cin >> n >> m;
 	Graph<> g(n);
 	for (int i = 0; i < m; ++i)
 	{
 		int u, v;
-		cin >> u >> v;
+		std::cin >> u >> v;
 		g.AddEdge(u, v);
 	}
 	auto ans = TopologicalSort(g);
 	for (auto x : ans)
 	{
-		cout << x << endl;
+		std::cout << x << std::endl;
 	}
 }
-*/
 // be checked by AOJ(GRL-4-B).
+// http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_4_B
