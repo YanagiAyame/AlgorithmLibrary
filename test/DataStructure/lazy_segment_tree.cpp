@@ -161,7 +161,7 @@ int main()
 	LazySegmentTree<P, ll> seg_tree(f, g, h, P(0, 0), 0);
 	seg_tree.build(std::vector<P>(n, P(0, 1)));
 	/*
-	// range update, range min
+	// range add, range min
 	auto f = [](ll a, ll b) {
 		return std::min(a, b);
 	};
@@ -171,6 +171,21 @@ int main()
 	auto h = [](ll a, ll b) { return a + b; };
 	LazySegmentTree<ll, ll> seg_tree(f, g, h, 1e12, 0);
 	seg_tree.build(std::vector<ll>(n, 0));
+	*/
+	/*
+	// range update, range min
+	auto f = [](ll a, ll b) {
+		return std::min(a, b);
+	};
+	auto g = [](ll a, ll b) {
+		if (b == 1e12)
+			return a;
+		else
+			return b;
+	};
+	auto h = [](ll a, ll b) { return b; };
+	LazySegmentTree<ll, ll> seg_tree(f, g, h, 1LL << 31, 1LL << 31);
+	seg_tree.build(std::vector<ll>(n, (1LL << 31) - 1));
 	*/
 	for (int i = 0; i < q; ++i)
 	{
@@ -193,4 +208,7 @@ int main()
 // http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_2_G
 
 // (cf.)
+// RAQ, RMQ
 // http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_2_H
+// RUQ, RMQ
+// http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_2_F
