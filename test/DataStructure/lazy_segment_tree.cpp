@@ -146,9 +146,9 @@ class LazySegmentTree
 
 int main()
 {
-	// range add, range sum
 	int n, q;
 	std::cin >> n >> q;
+	// range add, range sum
 	using ll = long long;
 	using P = std::pair<ll, ll>;
 	auto f = [](P a, P b) {
@@ -160,6 +160,18 @@ int main()
 	auto h = [](ll a, ll b) { return a + b; };
 	LazySegmentTree<P, ll> seg_tree(f, g, h, P(0, 0), 0);
 	seg_tree.build(std::vector<P>(n, P(0, 1)));
+	/*
+	// range update, range min
+	auto f = [](ll a, ll b) {
+		return std::min(a, b);
+	};
+	auto g = [](ll a, ll b) {
+		return a + b;
+	};
+	auto h = [](ll a, ll b) { return a + b; };
+	LazySegmentTree<ll, ll> seg_tree(f, g, h, 1e12, 0);
+	seg_tree.build(std::vector<ll>(n, 0));
+	*/
 	for (int i = 0; i < q; ++i)
 	{
 		int c, s, t;
