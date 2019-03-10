@@ -191,3 +191,6 @@ int main()
 }
 // be checked by AOJ(DSL-2-G).
 // http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_2_G
+
+// (cf.)
+// http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_2_H
