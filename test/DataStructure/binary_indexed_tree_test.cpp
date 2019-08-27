@@ -1,3 +1,6 @@
+#define PROBLEM "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_2_B"
+#include <../../src/DataStructure/binary_indexed_tree.hpp>
+
 #include <vector>
 #include <iostream>
 
@@ -10,7 +13,7 @@ class BinaryIndexedTree
 	const int size_;
 	std::vector<Abel> data_;
 
-  public:
+public:
 	BinaryIndexedTree(int size) : size_(size), data_(size + 1, 0) {}
 
 	// data[target] += num
@@ -53,5 +56,3 @@ int main()
 		}
 	}
 }
-// be checkd by AOJ(DSL-2-B).
-// http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_2_B
