@@ -1,17 +1,15 @@
 #pragma once
+#include <src/GraphAlgorithm/graph_type.hpp>
 
 #include <utility>
 #include <vector>
 #include <algorithm>
-#include <iostream>
-
-#include "graph_type.hpp"
 
 //再帰ラムダ用テンプレート
 template <typename F>
 class FixPoint : F
 {
-  public:
+public:
 	explicit constexpr FixPoint(F &&f) noexcept
 		: F(std::forward<F>(f))
 	{
