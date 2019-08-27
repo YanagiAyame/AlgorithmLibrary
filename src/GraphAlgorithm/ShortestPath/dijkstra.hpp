@@ -1,14 +1,14 @@
 #pragma once
 
+#include <src/GraphAlgorithm/graph_type.hpp>
+
 #include <vector>
 #include <queue>
 #include <tuple>
 #include <utility>
 
-#include "../graph_type.hpp"
-
 using Weight = long long;
-constexpr long long kWEIGHT_INF = 1e18;
+constexpr Weight kWEIGHT_INF = 1e18;
 
 template <class... Args>
 auto Dijkstra(const auto &g, int s)
