@@ -1,10 +1,10 @@
 #pragma once
 
+#include <src/DataStructure/union_find.hpp>
+#include <src/GraphAlgorithm/graph_type.hpp>
+
 #include <queue>
 #include <utility>
-
-#include "../../DataStructure/union_find.hpp"
-#include "../graph_type.hpp"
 
 using Weight = long long;
 // Kruskal's algorithm
