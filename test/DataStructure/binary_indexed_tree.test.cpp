@@ -1,5 +1,5 @@
 #define PROBLEM "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_2_B"
-#include <../../src/DataStructure/binary_indexed_tree.hpp>
+#include <src/DataStructure/binary_indexed_tree.hpp>
 
 #include <vector>
 #include <iostream>
