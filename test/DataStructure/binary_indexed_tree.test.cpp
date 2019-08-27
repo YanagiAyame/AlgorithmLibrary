@@ -15,7 +15,7 @@ int main()
 		x--;
 		if (com)
 		{
-			std::cout << 2 << std::endl;
+			std::cout << binary_indexed_tree.Sum(x, y) << std::endl;
 		}
 		else
 		{
