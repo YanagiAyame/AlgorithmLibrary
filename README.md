@@ -10,7 +10,8 @@
 
 # 現状
 
-test フォルダ内の "*.test.cpp" は travis CI で online-judge-tools を用いて主に AOJ で verify をしている。
+test フォルダ内の "*.test.cpp" は travis CI で online-judge-tools(by kmyk) https://github.com/kmyk/online-judge-tools
+を用いて主に AOJ で verify をしている。
 
 # ToDo
 
