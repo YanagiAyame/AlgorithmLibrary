@@ -1,5 +1,5 @@
 #define PROBLEM "https://atcoder.jp/contests/wupc2019/tasks/wupc2019_e"
-#include <src/Strng/manacher.hpp>
+#include <src/String/manacher.hpp>
 
 #include <iostream>
 
