@@ -1,4 +1,8 @@
+#ifdef __clang__
+#define IGNORE
+#else
 #define PROBLEM "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_2_B"
+#endif
 #include <src/DataStructure/binary_indexed_tree.hpp>
 
 #include <iostream>

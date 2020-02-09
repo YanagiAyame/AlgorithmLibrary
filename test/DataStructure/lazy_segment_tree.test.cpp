@@ -1,4 +1,8 @@
+#ifdef __clang__
+#define IGNORE
+#else
 #define PROBLEM "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_2_G"
+#endif
 #include <src/DataStructure/lazy_segment_tree.hpp>
 
 #include <iostream>

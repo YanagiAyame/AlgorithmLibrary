@@ -1,4 +1,8 @@
+#ifdef __clang__
+#define IGNORE
+#else
 #define PROBLEM "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_2_A"
+#endif
 #include <src/DataStructure/union_find.hpp>
 
 #include <tuple>

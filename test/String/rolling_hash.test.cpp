@@ -1,4 +1,8 @@
+#ifdef __clang__
+#define IGNORE
+#else
 #define PROBLEM "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2444"
+#endif
 #include <src/String/rolling_hash.hpp>
 
 #include <iostream>

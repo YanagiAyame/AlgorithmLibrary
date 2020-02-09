@@ -1,4 +1,8 @@
+#ifdef __clang__
+#define IGNORE
+#else
 #define PROBLEM "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_4_B"
+#endif
 #include <src/GraphAlgorithm/graph_type.hpp>
 #include <src/GraphAlgorithm/topological_sort.hpp>
 

@@ -1,4 +1,4 @@
-# AlgorithmLibrary　[![Build Status](https://travis-ci.org/YanagiAyame/AlgorithmLibrary.svg?branch=master)](https://travis-ci.org/YanagiAyame/AlgorithmLibrary)
+# AlgorithmLibrary　[![Actions Status](https://github.com/YanagiAyame/AlgorithmLibrary/workflows/verify/badge.svg)](https://github.com/YanagiAyame/AlgorithmLibrary/actions)
 
 すでに作ってある競プロ用のライブラリをC++の勉強がてらに作り直していきます。
 
