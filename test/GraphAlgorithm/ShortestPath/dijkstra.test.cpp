@@ -1,4 +1,8 @@
+#ifdef __clang__
+#define IGNORE
+#else
 #define PROBLEM "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_1_A"
+#endif
 #include <src/GraphAlgorithm/ShortestPath/dijkstra.hpp>
 
 #include <iostream>
